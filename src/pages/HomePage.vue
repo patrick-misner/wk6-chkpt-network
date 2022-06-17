@@ -1,17 +1,74 @@
 <template>
-  <div class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-    <div class="home-card p-5 bg-white rounded elevation-3">
-      <img src="https://bcw.blob.core.windows.net/public/img/8600856373152463" alt="CodeWorks Logo" class="rounded-circle">
-      <h1 class="my-5 bg-dark text-white p-3 rounded text-center">
-        Vue 3 Starter
-      </h1>
+
+
+<div class="container-fluid">
+  <div class="row bg-primary">
+    <div class="col-2 profile-sidebar bg-light">Profile</div>
+    <div class="col-10">
+      <h1 class="">Network+</h1>
+      <div class="row bg-light">
+        <div class="col-lg-9 bg-light">
+
+          <div class="bg-white elevation-2 shadow m-3 p-3">
+              <div class="d-flex align-items-center">
+                <img src="https://thiscatdoesnotexist.com" class="profile-img border border-2 border-dark" alt="">
+                  
+                  <textarea class="form-control mx-5" id="exampleFormControlTextarea1" placeholder="Post your feelings" rows="4" v-model="postData.body"></textarea>
+
+              </div>
+              <div class="d-flex justify-content-between m-2 p-2">
+                <input class="form-control form-control-sm w-25" type="text" placeholder="Image url" aria-label=".form-control-sm example" v-model="postData.imgUrl">
+                <button type="button" class="btn btn-primary" @click="createPost">Post</button>
+              </div>
+
+          </div>
+
+
+          <Post v-for="p in posts" :key="p.id" :post="p" />
+        </div>
+        <div class="col-3">
+          
+        </div>
+      </div>
     </div>
+  
   </div>
+
+</div>
 </template>
 
 <script>
+import { computed, onMounted, ref } from "@vue/runtime-core"
+import Pop from "../utils/Pop"
+import { logger } from "../utils/Logger"
+import { postsService } from "../services/PostsService"
+import { AppState } from "../AppState"
 export default {
-  name: 'Home'
+  name: 'Home',
+  setup(){
+    const postData = ref({});
+    onMounted(async ()=> {
+      try {
+        await postsService.getPosts()
+      } catch (error) {
+        logger.error(error)
+        Pop.toast(error.message, 'error')
+      } 
+    });
+    return {
+      postData,
+      posts: computed(() => AppState.posts),
+      async createPost() {
+        try {
+          await postsService.createPost(postData.value)
+          Pop.toast('Post submitted!', 'success')
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      }
+    }
+  }
 }
 </script>
 
@@ -33,4 +90,34 @@ export default {
     }
   }
 }
+
+
+
+  body.debug .container,
+  body.debug .container-fluid {
+    outline: 2px double blue;
+    outline-offset: -2px;
+  }
+
+  body.debug .row {
+    outline: 2px dashed red;
+    outline-offset: -2px;
+  }
+
+  body.debug [class*="col-"] {
+    outline: 2px dotted forestgreen;
+    outline-offset: -3px;
+  }
+
+  .profile-sidebar{
+    height: 100vh;
+  }
+
+  .profile-img{
+    height: 65px;
+    width: 65px;
+    border-radius: 50%;
+
+  }
+
 </style>
