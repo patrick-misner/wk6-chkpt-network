@@ -9,7 +9,7 @@
                 <h5 class="px-4">{{ post.creator.name }}</h5>
               </div>
               <div class="div py-2 px-2 text-muted">
-                <p>{{ post.createdAt }} <i class="mdi mdi-school px-3"></i></p>
+                <p>{{ post.createdAt }} <i v-if="post.creator.graduated" class="mdi mdi-school px-3"></i></p>
               </div>
               <div class="px-2">
                 <p>{{ post.body }}</p>
@@ -21,7 +21,8 @@
               <div v-if="post.imgUrl" class="d-flex justify-content-center border-top border-2 border-primary">
                 <img :src="post.imgUrl" class="img-fluid post-img my-3" alt="">
               </div>
-          </div>
+
+            </div>
 
 </template>
 

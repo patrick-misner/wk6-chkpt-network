@@ -9,9 +9,9 @@
       <div class="row bg-light">
         <div class="col-lg-9 bg-light">
 
-          <div class="bg-white elevation-2 shadow m-3 p-3">
+          <div v-if="account.id" class="bg-white elevation-2 shadow m-3 p-3 border border-3 border-primary">
               <div class="d-flex align-items-center">
-                <img src="https://thiscatdoesnotexist.com" class="profile-img border border-2 border-dark" alt="">
+                <img :src="account.picture" class="profile-img border border-2 border-dark selectable" @click="goToProfile" alt="">
                   
                   <textarea class="form-control mx-5" id="exampleFormControlTextarea1" placeholder="Post your feelings" rows="4" v-model="postData.body"></textarea>
 
@@ -25,6 +25,10 @@
 
 
           <Post v-for="p in posts" :key="p.id" :post="p" />
+                        <div class="d-flex justify-content-between mx-5">
+                <button @click="changePage(previousPage)" :disabled="!previousPage" type="button" class="btn btn-primary">Previous</button>
+                <button @click="changePage(nextPage)" :disabled="!nextPage" type="button" class="btn btn-primary">Next</button>
+              </div>
         </div>
         <div class="col-3">
           
@@ -43,6 +47,7 @@ import Pop from "../utils/Pop"
 import { logger } from "../utils/Logger"
 import { postsService } from "../services/PostsService"
 import { AppState } from "../AppState"
+import { router } from "../router"
 export default {
   name: 'Home',
   setup(){
@@ -58,10 +63,29 @@ export default {
     return {
       postData,
       posts: computed(() => AppState.posts),
+      account: computed(() => AppState.account),
+      nextPage: computed(() => AppState.nextPage),
+      previousPage: computed(() => AppState.previousPage),
       async createPost() {
         try {
           await postsService.createPost(postData.value)
           Pop.toast('Post submitted!', 'success')
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+      },
+      goToProfile() {
+        logger.log('button pushed')
+        router.push({
+          name: "Profile",
+          params: { id: AppState.account.id}
+        })
+      },
+      async changePage(url){
+        try {
+          await postsService.changePage(url)
+          scrollTo(0,0)
         } catch (error) {
           logger.error(error)
           Pop.toast(error.message, 'error')
