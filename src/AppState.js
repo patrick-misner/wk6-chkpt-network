@@ -6,6 +6,9 @@ export const AppState = reactive({
   account: {},
   profile: {},
   posts: [],
+  activePost: {},
   nextPage: null,
-  previousPage: null
+  previousPage: null,
+  editTrigger: false,
+  billboards: []
 })

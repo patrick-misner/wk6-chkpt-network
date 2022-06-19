@@ -42,8 +42,8 @@
           </div>
           <div class="px-2 fs-1 d-flex justify-content-between align-items-end">
             <div class="px-0">
-              <i class="mdi mdi-github"></i>
-              <i class="mdi mdi-linkedin text-primary"></i>
+              <a :href="profile.github"><i v-if="profile.github" class="mdi mdi-github selectable text-dark"></i></a>
+              <a :href="profile.linkedin"><i v-if="profile.linkedin" class="mdi mdi-linkedin selectable text-dark"></i></a>
             </div>
             <p class="fs-6">E-mail: {{ profile.email }}</p>
           </div>
@@ -62,16 +62,33 @@
 
           <img src="post.imgUrl" class="img-fluid post-img my-3" alt="" />
         </div>
+
+      <Post v-for="p in posts" :key="p.id" :post="p" />
+
+                          <div class="d-flex justify-content-between mx-5">
+                <button @click="changePage(previousPage)" :disabled="!previousPage" type="button" class="btn btn-primary">Previous</button>
+                <button @click="changePage(nextPage)" :disabled="!nextPage" type="button" class="btn btn-primary">Next</button>
+              </div>
+
+
       </div>
+      
+      <div class="col-md-2">
+      <BillBoards />
+      </div>
+      
+
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-      <Post v-for="p in posts" :key="p.id" :post="p" />
+      
     </div>
-    <div class="col-2"></div>
+    <div class="col-2">
+      
+    </div>
   </div>
 
   <!-- Button trigger modal -->
@@ -236,11 +253,12 @@
           >
             Close
           </button>
-          <button @click="saveAccount" type="button" class="btn btn-primary">Save</button>
+          <button @click="saveAccount" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
         </div>
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -253,51 +271,62 @@ import { profilesService } from "../services/ProfilesService";
 import { useRoute } from "vue-router";
 import { Modal } from "bootstrap";
 import { accountService } from "../services/AccountService";
+import BillBoards from "../components/BillBoards.vue";
 export default {
-  name: "Account",
-  setup() {
-    const route = useRoute();
-    const editable = ref({});
-    watchEffect(() => {
-      AppState.account;
-      logger.log('account updated', editable.value)
-      editable.value = { ...AppState.account}
-    })
-    onMounted(async () => {
-      try {
-        AppState.posts = [];
-        await profilesService.getProfile(route.params.id);
-        await postsService.getProfilePosts(route.params.id);
-      } catch (error) {
-        logger.error(error);
-        Pop.toast(error.message, "error");
-      }
-    });
-    return {
-      editable,
-      account: computed(() => AppState.account),
-      profile: computed(() => AppState.profile),
-      posts: computed(() => AppState.posts),
-      editProfile() {
-        Modal.getOrCreateInstance(
-          document.getElementById("profile-modal")
-        ).show();
-        
-      },
-      async saveAccount() {
-        try {
-          Modal.getOrCreateInstance(
-          document.getElementById("profile-modal")
-        ).hide();
-          await accountService.editAccount(editable.value);
-          Pop.toast('Account updated', "success")
-        } catch (error) {
-          logger.error(error)
-          Pop.toast(error.message, 'error')
-        }
-      }
-    };
-  },
+    name: "Account",
+    setup() {
+        const route = useRoute();
+        const editable = ref({});
+        watchEffect(() => {
+            AppState.account;
+            logger.log("account updated", editable.value);
+            editable.value = { ...AppState.account };
+        });
+        onMounted(async () => {
+            try {
+                AppState.posts = [];
+                await profilesService.getProfile(route.params.id);
+                await postsService.getProfilePosts(route.params.id);
+            }
+            catch (error) {
+                logger.error(error);
+                Pop.toast(error.message, "error");
+            }
+        });
+        return {
+            editable,
+            account: computed(() => AppState.account),
+            profile: computed(() => AppState.profile),
+            posts: computed(() => AppState.posts),
+            nextPage: computed(() => AppState.nextPage),
+            previousPage: computed(() => AppState.previousPage),
+            editProfile() {
+                Modal.getOrCreateInstance(document.getElementById("profile-modal")).show();
+            },
+            async saveAccount() {
+                try {
+                    await accountService.editAccount(editable.value);
+                    Pop.toast("Account updated", "success");
+                    await profilesService.getProfile(route.params.id);
+                }
+                catch (error) {
+                    logger.error(error);
+                    Pop.toast(error.message, "error");
+                }
+            },
+            async changePage(url) {
+                try {
+                    await postsService.changePage(url);
+                    scrollTo(0, 0);
+                }
+                catch (error) {
+                    logger.error(error);
+                    Pop.toast(error.message, "error");
+                }
+            }
+        };
+    },
+    components: { BillBoards }
 };
 </script>
 

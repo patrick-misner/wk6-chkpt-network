@@ -2,6 +2,7 @@
   
             <div class="bg-white elevation-2 shadow m-3 p-3">
               <div v-if="post.creator.id == account.id" class="d-flex justify-content-end text-danger">
+                <i @click="setActive" class="mdi mdi-pencil selectable text-primary px-3"></i>
                 <i class="mdi mdi-delete selectable" @click="deletePost"></i>
               </div>
               <div class="d-flex align-items-center">
@@ -15,9 +16,10 @@
                 <p>{{ post.body }}</p>
               </div>
               <div class="px-2 d-flex justify-content-end">
-                <i class="mdi mdi-heart px-2"></i>
-                <span>45</span>
+                <i class="mdi mdi-heart px-2 selectable" @click="likePost"></i>
+                <span>{{ post.likes.length }}</span>
               </div>
+
               <div v-if="post.imgUrl" class="d-flex justify-content-center border-top border-2 border-primary">
                 <img :src="post.imgUrl" class="img-fluid post-img my-3" alt="">
               </div>
@@ -27,18 +29,25 @@
 </template>
 
 <script>
-import { computed } from "@vue/reactivity"
+import { computed, ref } from "@vue/reactivity"
 import { postsService } from "../services/PostsService"
 import { AppState } from "../AppState"
 import { logger } from "../utils/Logger"
 import Pop from "../utils/Pop"
 import { router } from "../router"
+import { watchEffect } from "@vue/runtime-core"
+import { Modal } from "bootstrap"
 export default {
   props: { post: { type: Object, required: true}},
   setup(props) {
+    const editPost = ref({});
+    watchEffect(()=> {
+      editPost.value = props.post
+    })
     return {
       account: computed(()=> AppState.account),
       posts: computed(()=> AppState.posts),
+      editPost,
       async deletePost(){
         try {
           if(await Pop.confirm('Are you sure you want to delete this post?')){
@@ -56,7 +65,21 @@ export default {
           name: "Profile",
           params: { id: props.post.creator.id}
         })
+      },
+      setActive(){
+        postsService.setActive(props.post)
+        Modal.getOrCreateInstance(document.getElementById("post-modal")).show();
+      },
+      async likePost(){
+        try {
+          await postsService.likePost(props.post.id)
+        } catch (error) {
+          logger.error(error)
+          Pop.toast(error.message, 'error')
+        }
+        
       }
+      
     }
   }
 }

@@ -2,14 +2,11 @@
 
 
 <div class="container-fluid">
-  <div class="row bg-primary">
+  <div class="row">
     <div class="col-2 profile-sidebar bg-light">Profile</div>
-    <div class="col-10">
-      <h1 class="">Network+</h1>
-      <div class="row bg-light">
-        <div class="col-lg-9 bg-light">
-
-          <div v-if="account.id" class="bg-white elevation-2 shadow m-3 p-3 border border-3 border-primary">
+    <div class="col-8">
+      
+          <div v-if="account.id" class="bg-white elevation-2 shadow rounded m-3 p-3 border border-3 border-primary">
               <div class="d-flex align-items-center">
                 <img :src="account.picture" class="profile-img border border-2 border-dark selectable" @click="goToProfile" alt="">
                   
@@ -29,11 +26,10 @@
                 <button @click="changePage(previousPage)" :disabled="!previousPage" type="button" class="btn btn-primary">Previous</button>
                 <button @click="changePage(nextPage)" :disabled="!nextPage" type="button" class="btn btn-primary">Next</button>
               </div>
-        </div>
-        <div class="col-3">
-          
-        </div>
-      </div>
+     
+    </div>
+    <div class="col-2">
+      <BillBoards />
     </div>
   
   </div>
@@ -48,51 +44,56 @@ import { logger } from "../utils/Logger"
 import { postsService } from "../services/PostsService"
 import { AppState } from "../AppState"
 import { router } from "../router"
+import BillBoards from "../components/BillBoards.vue"
 export default {
-  name: 'Home',
-  setup(){
-    const postData = ref({});
-    onMounted(async ()=> {
-      try {
-        await postsService.getPosts()
-      } catch (error) {
-        logger.error(error)
-        Pop.toast(error.message, 'error')
-      } 
-    });
-    return {
-      postData,
-      posts: computed(() => AppState.posts),
-      account: computed(() => AppState.account),
-      nextPage: computed(() => AppState.nextPage),
-      previousPage: computed(() => AppState.previousPage),
-      async createPost() {
-        try {
-          await postsService.createPost(postData.value)
-          Pop.toast('Post submitted!', 'success')
-        } catch (error) {
-          logger.error(error)
-          Pop.toast(error.message, 'error')
-        }
-      },
-      goToProfile() {
-        logger.log('button pushed')
-        router.push({
-          name: "Profile",
-          params: { id: AppState.account.id}
-        })
-      },
-      async changePage(url){
-        try {
-          await postsService.changePage(url)
-          scrollTo(0,0)
-        } catch (error) {
-          logger.error(error)
-          Pop.toast(error.message, 'error')
-        }
-      }
-    }
-  }
+    name: "Home",
+    setup() {
+        const postData = ref({});
+        onMounted(async () => {
+            try {
+                await postsService.getPosts();
+            }
+            catch (error) {
+                logger.error(error);
+                Pop.toast(error.message, "error");
+            }
+        });
+        return {
+            postData,
+            posts: computed(() => AppState.posts),
+            account: computed(() => AppState.account),
+            nextPage: computed(() => AppState.nextPage),
+            previousPage: computed(() => AppState.previousPage),
+            async createPost() {
+                try {
+                    await postsService.createPost(postData.value);
+                    Pop.toast("Post submitted!", "success");
+                }
+                catch (error) {
+                    logger.error(error);
+                    Pop.toast(error.message, "error");
+                }
+            },
+            goToProfile() {
+                logger.log("button pushed");
+                router.push({
+                    name: "Profile",
+                    params: { id: AppState.account.id }
+                });
+            },
+            async changePage(url) {
+                try {
+                    await postsService.changePage(url);
+                    scrollTo(0, 0);
+                }
+                catch (error) {
+                    logger.error(error);
+                    Pop.toast(error.message, "error");
+                }
+            }
+        };
+    },
+    components: { BillBoards }
 }
 </script>
 

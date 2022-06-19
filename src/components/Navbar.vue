@@ -16,6 +16,7 @@
     >
       <span class="navbar-toggler-icon" />
     </button>
+    
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto">
         <li>
@@ -27,16 +28,30 @@
           </router-link>
         </li>
       </ul>
+      <form class="d-flex mx-5">
+        <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search Posts..." aria-label="Search">
+        <button class="btn btn-outline-success" @click="searchPosts" type="submit">Search</button>
+      </form>
       <!-- LOGIN COMPONENT HERE -->
+      
       <Login />
     </div>
   </nav>
 </template>
 
 <script>
+import { ref } from "@vue/reactivity";
+import { postsService } from "../services/PostsService";
 export default {
   setup() {
-    return {};
+    const searchTerm = ref('')
+    return {
+      searchTerm,
+      async searchPosts(){
+        await postsService.searchPosts(searchTerm.value)
+
+      }
+    };
   },
 };
 </script>
