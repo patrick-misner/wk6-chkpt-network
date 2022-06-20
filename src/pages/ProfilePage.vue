@@ -16,7 +16,7 @@
           "
         >
           <div class="cover-img text-white text-shadow" :style='`background-image: url("${profile.coverImg}");
-  background-position: center`'>
+  background-position: center; background-repeat: no-repeat; background-size: auto;`'>
             <div class="d-flex justify-content-between p-3">
               <h1>Profile Details</h1>
               <img
