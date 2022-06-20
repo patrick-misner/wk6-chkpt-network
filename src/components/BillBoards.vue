@@ -1,8 +1,8 @@
 <template>
 
-  <div v-for="b in billboards" :key="b.title" :billboard="b" class="py-5 selectable">
+  <div v-for="b in billboards" :key="b.title" :billboard="b" class="py-5 d-flex justify-content-center">
    <a :href="`https://${b.linkURL}`">
-    <img :src="b.tall" class="img-fluid border border-4 border-warning" alt="">
+    <img :src="b.tall" class="img-fluid border border-4 border-warning selectable" alt="">
    </a>
 
   </div>

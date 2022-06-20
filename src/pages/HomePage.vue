@@ -3,10 +3,10 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-2 profile-sidebar bg-light">
+    <div class="col-md-2 profile-sidebar bg-light">
       <ProfileSideBar v-if="account.id" />
     </div>
-    <div class="col-8">
+    <div class="col-md-8">
       
           <div v-if="account.id" class="bg-white elevation-2 shadow rounded m-3 p-3 border border-3 border-primary">
               <form @submit.prevent="createPost">
@@ -31,7 +31,7 @@
               </div>
      
     </div>
-    <div class="col-2">
+    <div class="col-md-2">
       <BillBoards />
     </div>
   

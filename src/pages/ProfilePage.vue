@@ -90,7 +90,7 @@
     <div class="col-md-8">
       
     </div>
-    <div class="col-2">
+    <div class="col-md-2">
       
     </div>
   </div>
