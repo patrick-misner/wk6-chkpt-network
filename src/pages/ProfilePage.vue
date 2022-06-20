@@ -289,6 +289,7 @@ import { AppState } from "../AppState";
 import { postsService } from "../services/PostsService";
 import { profilesService } from "../services/ProfilesService";
 import { useRoute } from "vue-router";
+import { router } from "../router"
 import { Modal } from "bootstrap";
 import { accountService } from "../services/AccountService";
 import BillBoards from "../components/BillBoards.vue";
