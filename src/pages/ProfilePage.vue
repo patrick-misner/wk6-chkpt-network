@@ -53,7 +53,7 @@
           </div>
           <div
             v-if="profile.id == account.id"
-            class="d-flex justify-content-end px-3 pt-3"
+            class="d-flex justify-content-end px-3 py-3"
           >
             <button
               @click="editProfile"
@@ -64,7 +64,7 @@
             </button>
           </div>
 
-          <img src="post.imgUrl" class="img-fluid post-img my-3" alt="" />
+
         </div>
 
       <Post v-for="p in posts" :key="p.id" :post="p" />

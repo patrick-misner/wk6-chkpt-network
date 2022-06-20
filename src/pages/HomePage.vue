@@ -13,11 +13,11 @@
               <div class="d-flex align-items-center">
                 <img :src="account.picture" class="profile-img border border-2 border-dark selectable" @click="goToProfile" alt="">
 
-                  <textarea class="form-control mx-5" id="exampleFormControlTextarea1" placeholder="Post your feelings" rows="4" v-model="postData.body" required></textarea>
+                  <textarea class="form-control mx-5" id="exampleFormControlTextarea1" :placeholder="`What's on your mind, ${account.name}?`" rows="4" v-model="postData.body" required></textarea>
 
               </div>
               <div class="d-flex justify-content-between m-2 p-2">
-                <input class="form-control form-control-sm w-25" type="text" placeholder="Image url (optional)" aria-label=".form-control-sm example" v-model="postData.imgUrl">
+                <input class="form-control form-control-sm w-25" type="text" placeholder="Add Image url (optional)" aria-label=".form-control-sm example" v-model="postData.imgUrl">
                 <button type="submit" class="btn btn-primary">Post</button>
               </div>
               </form>

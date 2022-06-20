@@ -5,7 +5,7 @@ import { api } from "./AxiosService"
 class ProfilesService {
   async getProfile(id){
     const res = await api.get('api/profiles/' + id)
-    logger.log('-getprofile', id)
+    // logger.log('-getprofile', id)
     AppState.profile = res.data
   }
 }
