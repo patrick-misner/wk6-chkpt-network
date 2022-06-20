@@ -10,13 +10,17 @@
                 <h5 class="px-4">{{ post.creator.name }}</h5>
               </div>
               <div class="div py-2 px-2 text-muted">
-                <p>{{ post.createdAt }} <i v-if="post.creator.graduated" class="mdi mdi-school px-3"></i></p>
+                <p>{{ formatDate(post.createdAt) }} <i v-if="post.creator.graduated" class="mdi mdi-school px-3"></i></p>
               </div>
               <div class="px-2">
                 <p>{{ post.body }}</p>
               </div>
-              <div class="px-2 d-flex justify-content-end">
+              <div v-if="account.id" class="px-2 d-flex justify-content-end">
                 <i class="mdi mdi-heart px-2 selectable" @click="likePost"></i>
+                <span>{{ post.likes.length }}</span>
+              </div>
+              <div v-if="!account.id" class="px-2 d-flex justify-content-end">
+                <i class="mdi mdi-heart px-2"></i>
                 <span>{{ post.likes.length }}</span>
               </div>
 
@@ -78,6 +82,9 @@ export default {
           Pop.toast(error.message, 'error')
         }
         
+      },
+      formatDate(rawDate){
+        return new Date(rawDate).toLocaleString();
       }
       
     }

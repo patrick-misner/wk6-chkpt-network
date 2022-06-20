@@ -19,14 +19,14 @@
     
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto">
-        <li>
+        <!-- <li>
           <router-link
             :to="{ name: 'About' }"
             class="btn text-success lighten-30 selectable text-uppercase"
           >
             Profile
           </router-link>
-        </li>
+        </li> -->
       </ul>
       <form class="d-flex mx-5">
         <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search Posts..." aria-label="Search">

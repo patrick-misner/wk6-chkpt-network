@@ -1,7 +1,9 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-2"></div>
+      <div class="col-md-2">
+        <ProfileSideBar />
+      </div>
       <div class="col-md-8">
         <div
           class="
@@ -13,7 +15,8 @@
             border border-3 border-primary
           "
         >
-          <div class="cover-img text-white text-shadow">
+          <div class="cover-img text-white text-shadow" :style='`background-image: url("${profile.coverImg}");
+  background-position: center`'>
             <div class="d-flex justify-content-between p-3">
               <h1>Profile Details</h1>
               <img
@@ -28,9 +31,9 @@
             </div>
           </div>
           <div>
-            <p class="pt-3 p-2"><b>Graduated:</b> {{ profile.graduated }}</p>
+            <p class="pt-3 p-2 fs-1"><i v-if="profile.graduated" class="mdi mdi-school text-primary"></i></p>
           </div>
-          <div class="div d-flex justify-content-between py-2 p-2">
+          <div class="div d-flex justify-content-between py-2 p-2 px-4">
             <p>
               <b>Biography</b> <br />
               {{ profile.bio }} 
@@ -46,6 +49,7 @@
               <a :href="profile.linkedin"><i v-if="profile.linkedin" class="mdi mdi-linkedin selectable text-dark"></i></a>
             </div>
             <p class="fs-6">E-mail: {{ profile.email }}</p>
+            <p class="fs-6">Class: {{ profile.class }}</p>
           </div>
           <div
             v-if="profile.id == account.id"
@@ -228,6 +232,22 @@
                   ></textarea>
                 </div>
               </div>
+              <div class="col-12">
+
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label"
+                    >Class</label
+                  >
+                  <input
+                    v-model="editable.class"
+                    type="text"
+                    class="form-control"
+                    id="exampleFormControlInput1"
+                    placeholder="Class"
+                  />
+                </div>
+
+              </div>
                             <div class="col-12">
                 <div class="form-check">
                   <input
@@ -272,6 +292,7 @@ import { useRoute } from "vue-router";
 import { Modal } from "bootstrap";
 import { accountService } from "../services/AccountService";
 import BillBoards from "../components/BillBoards.vue";
+import ProfileSideBar from "../components/ProfileSideBar.vue";
 export default {
     name: "Account",
     setup() {
@@ -326,13 +347,10 @@ export default {
             }
         };
     },
-    components: { BillBoards }
+    components: { BillBoards, ProfileSideBar }
 };
 </script>
 
 <style>
-.cover-img {
-  background-image: url("https://images.unsplash.com/photo-1586829135343-132950070391?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80");
-  background-position: center;
-}
+
 </style>

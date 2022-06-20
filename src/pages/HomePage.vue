@@ -3,21 +3,24 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-2 profile-sidebar bg-light">Profile</div>
+    <div class="col-2 profile-sidebar bg-light">
+      <ProfileSideBar v-if="account.id" />
+    </div>
     <div class="col-8">
       
           <div v-if="account.id" class="bg-white elevation-2 shadow rounded m-3 p-3 border border-3 border-primary">
+              <form @submit.prevent="createPost">
               <div class="d-flex align-items-center">
                 <img :src="account.picture" class="profile-img border border-2 border-dark selectable" @click="goToProfile" alt="">
-                  
-                  <textarea class="form-control mx-5" id="exampleFormControlTextarea1" placeholder="Post your feelings" rows="4" v-model="postData.body"></textarea>
+
+                  <textarea class="form-control mx-5" id="exampleFormControlTextarea1" placeholder="Post your feelings" rows="4" v-model="postData.body" required></textarea>
 
               </div>
               <div class="d-flex justify-content-between m-2 p-2">
-                <input class="form-control form-control-sm w-25" type="text" placeholder="Image url" aria-label=".form-control-sm example" v-model="postData.imgUrl">
-                <button type="button" class="btn btn-primary" @click="createPost">Post</button>
+                <input class="form-control form-control-sm w-25" type="text" placeholder="Image url (optional)" aria-label=".form-control-sm example" v-model="postData.imgUrl">
+                <button type="submit" class="btn btn-primary">Post</button>
               </div>
-
+              </form>
           </div>
 
 
@@ -45,6 +48,7 @@ import { postsService } from "../services/PostsService"
 import { AppState } from "../AppState"
 import { router } from "../router"
 import BillBoards from "../components/BillBoards.vue"
+import ProfileSideBar from "../components/ProfileSideBar.vue"
 export default {
     name: "Home",
     setup() {
@@ -74,8 +78,7 @@ export default {
                     Pop.toast(error.message, "error");
                 }
             },
-            goToProfile() {
-                logger.log("button pushed");
+            goToProfile() {                
                 router.push({
                     name: "Profile",
                     params: { id: AppState.account.id }
@@ -93,7 +96,7 @@ export default {
             }
         };
     },
-    components: { BillBoards }
+    components: { BillBoards, ProfileSideBar }
 }
 </script>
 
