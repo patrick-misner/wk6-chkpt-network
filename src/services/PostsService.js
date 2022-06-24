@@ -58,7 +58,7 @@ class PostsService {
     AppState.previousPage = res.data.newer
   }
   async likePost(postId){
-    const res = await api.post('api/posts/' + postId + '/like')
+    const res = await api.post('api/posts/' + postId + '/like') 
     // logger.log('like post service', res.data)
     let original = AppState.posts.find(p => p.id == postId)
     // logger.log('original post', original.likes)
