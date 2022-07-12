@@ -28,9 +28,9 @@
           </router-link>
         </li> -->
       </ul>
-      <form class="d-flex mx-5">
+      <form @onsubmit.prevent="searchPosts" class="d-flex mx-5">
         <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search Posts..." aria-label="Search">
-        <button class="btn btn-outline-success" @click="searchPosts" type="submit">Search</button>
+        <button class="btn btn-outline-success"  type="submit">Search</button>
       </form>
       <!-- LOGIN COMPONENT HERE -->
       
